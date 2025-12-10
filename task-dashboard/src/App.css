@@ -4,11 +4,28 @@
   padding: 0;
 }
 
+:root {
+  --bg: #f5f6fa;
+  --text: #222;
+  --card: #fff;
+  --shadow: rgba(0, 0, 0, 0.08);
+  --accent: #4a90e2;
+}
+
+[data-theme="dark"] {
+  --bg: #1e1f25;
+  --text: #f1f1f1;
+  --card: #2a2c34;
+  --shadow: rgba(0, 0, 0, 0.35);
+  --accent: #79b8ff;
+}
+
 body {
   font-family: system-ui, sans-serif;
-  background: #f5f6fa;
-  color: #222;
+  background: var(--bg);
+  color: var(--text);
   padding: 20px;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .app {
@@ -33,10 +50,12 @@ body {
 .dashboard-list,
 .dashboard-actions,
 .dashboard-stats {
-  background: #fff;
+  background: var(--card);
+  color: var(--text);
   padding: 16px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 4px var(--shadow);
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .stats-section ul {
@@ -70,4 +89,19 @@ body {
   .dashboard-stats {
     grid-column: 1 / 3;
   }
+}
+
+.theme-toggle {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.theme-toggle:hover {
+  opacity: 0.9;
 }
