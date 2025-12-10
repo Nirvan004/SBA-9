@@ -1,13 +1,25 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import type { Task, TaskFormData, TaskFilterOptions } from "../../types";
+
 import TaskList from "../TaskList/TaskList";
 import TaskForm from "../TaskForm/TaskForm";
 import TaskFilter from "../TaskFilter/TaskFilter";
 
+import {
+  loadTasksFromLocalStorage,
+  saveTasksToLocalStorage,
+  exportTasksAsJSON,
+  importTasksFromJSON,
+} from "../../utils/taskUtils";
+
 const Dashboard: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(() => loadTasksFromLocalStorage());
   const [filter, setFilter] = useState<TaskFilterOptions>({});
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+
+  useEffect(() => {
+    saveTasksToLocalStorage(tasks);
+  }, [tasks]);
 
   const handleAddOrUpdateTask = (data: TaskFormData) => {
     if (editingTask) {
@@ -32,20 +44,32 @@ const Dashboard: React.FC = () => {
   };
 
   const handleUpdateTask = (updatedTask: Task) => {
-    setTasks(prev => prev.map(t => t.id === updatedTask.id ? updatedTask : t));
+    setTasks(prev =>
+      prev.map(t => (t.id === updatedTask.id ? updatedTask : t))
+    );
   };
 
-  const stats = useMemo(() => {
-    const statusCount: Record<string, number> = {};
-    const priorityCount: Record<string, number> = {};
+  const statusCount: Record<string, number> = {};
+  const priorityCount: Record<string, number> = {};
 
-    tasks.forEach(task => {
-      statusCount[task.status] = (statusCount[task.status] || 0) + 1;
-      priorityCount[task.priority] = (priorityCount[task.priority] || 0) + 1;
-    });
+  tasks.forEach(task => {
+    statusCount[task.status] = (statusCount[task.status] || 0) + 1;
+    priorityCount[task.priority] = (priorityCount[task.priority] || 0) + 1;
+  });
 
-    return { statusCount, priorityCount };
-  }, [tasks]);
+  const stats = { statusCount, priorityCount };
+
+  const handleExport = () => {
+    exportTasksAsJSON(tasks);
+  };
+
+  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.[0]) return;
+
+    const importedTasks = await importTasksFromJSON(e.target.files[0]);
+    setTasks(importedTasks);
+    e.target.value = "";
+  };
 
   return (
     <div className="dashboard-container">
@@ -71,8 +95,14 @@ const Dashboard: React.FC = () => {
         />
       </div>
 
+      <div className="dashboard-actions">
+        <button onClick={handleExport}>Export Tasks</button>
+        <input type="file" accept=".json" onChange={handleImport} />
+      </div>
+
       <div className="dashboard-stats">
         <h3>Task Statistics</h3>
+
         <div className="stats-section">
           <h4>Status</h4>
           <ul>
@@ -81,6 +111,7 @@ const Dashboard: React.FC = () => {
             <li>Done: {stats.statusCount["done"] || 0}</li>
           </ul>
         </div>
+
         <div className="stats-section">
           <h4>Priority</h4>
           <ul>
