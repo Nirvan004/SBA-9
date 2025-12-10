@@ -34,6 +34,9 @@ body {
 }
 
 .app-title {
+}
+
+.app-title {
   text-align: center;
   font-size: 2rem;
   margin-bottom: 20px;
@@ -58,6 +61,14 @@ body {
   transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
+.stats-section ul {
+  list-style: none;
+  margin-top: 8px;
+}
+
+.stats-section li {
+  padding: 4px 0;
+  font-size: 0.95rem;
 .stats-section ul {
   list-style: none;
   margin-top: 8px;
