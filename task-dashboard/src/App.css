@@ -1,42 +1,73 @@
-#root {
-  max-width: 1280px;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #f5f6fa;
+  color: #222;
+  padding: 20px;
+}
+
+.app {
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 2rem;
+}
+
+.app-title {
   text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-weight: 600;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.dashboard-container {
+  display: grid;
+  gap: 20px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.dashboard-form,
+.dashboard-filter,
+.dashboard-list,
+.dashboard-actions,
+.dashboard-stats {
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.stats-section ul {
+  list-style: none;
+  margin-top: 8px;
+}
+
+.stats-section li {
+  padding: 4px 0;
+  font-size: 0.95rem;
+}
+
+@media (min-width: 700px) {
+  .dashboard-container {
+    grid-template-columns: 1fr 2fr;
   }
-  to {
-    transform: rotate(360deg);
+
+  .dashboard-form {
+    grid-column: 1 / 2;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .dashboard-filter {
+    grid-column: 1 / 2;
   }
-}
 
-.card {
-  padding: 2em;
-}
+  .dashboard-list {
+    grid-column: 2 / 3;
+    min-height: 300px;
+  }
 
-.read-the-docs {
-  color: #888;
+  .dashboard-stats {
+    grid-column: 1 / 3;
+  }
 }
